@@ -11,6 +11,7 @@ GameScene::~GameScene() {
 	delete model_;
 	delete player_;
 	delete enemy_;
+	delete modelSkydome_;
 }
 
 void GameScene::Initialize() {
@@ -22,6 +23,7 @@ void GameScene::Initialize() {
 
 	//3Dモデルの生成
 	model_ = Model::Create();
+
 	//自キャラの生成
 	player_ = new Player();
 	//自キャラモデルの生成
@@ -36,14 +38,42 @@ void GameScene::Initialize() {
 	//敵キャラの初期化
 	enemy_->Initialize(modelEnemy_);
 
+	//天球の生成
+	skydome_ = new Skydome();
+	//天球モデルの生成
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
+	//天球の初期化
+	skydome_->Initialize(modelSkydome_);
+
 	//ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
+
 	//ビュープロジェクションの初期化
 	viewProjection_.Initialize();
+
+	//視点移動
+	viewProjection_.eye.z = 20;
+
+	viewProjection_.UpdateMatrix();
+
 
 }
 
 void GameScene::Update() {
+
+	player_->Update();
+	enemy_->Update();
+
+	//視点移動
+	
+	
+	viewProjection_.eye.x = player_->GetX();
+	viewProjection_.eye.y = player_->GetY();
+	
+	viewProjection_.target.x = player_->GetX() - 10;
+	viewProjection_.target.y = player_->GetY() + 6;
+	viewProjection_.target.z = player_->GetZ();
+	viewProjection_.UpdateMatrix();
 
 
 }
@@ -74,6 +104,9 @@ void GameScene::Draw() {
 	/// <summary>
 	/// ここに3Dオブジェクトの描画処理を追加できる
 	/// </summary>
+
+	//天球の描画
+	skydome_->Draw(viewProjection_);
 
 	//自キャラの描画
 	player_->Draw(viewProjection_);

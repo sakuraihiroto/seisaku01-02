@@ -11,6 +11,9 @@
 #include "WorldTransform.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Skydome.h"
+#include"DebugCamera.h"
+
 
 /// <summary>
 /// ゲームシーン
@@ -48,7 +51,7 @@ class GameScene {
 	Input* input_ = nullptr;
 	Audio* audio_ = nullptr;
 	DebugText* debugText_ = nullptr;
-
+	
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
@@ -58,6 +61,7 @@ class GameScene {
 	Model* model_ = nullptr;
 	Model* modelPlayer_ = nullptr; //プレイヤーモデル
 	Model* modelEnemy_ = nullptr; //敵モデル
+	Model* modelSkydome_ = nullptr; //背景
 
 	//ワールドトランスフォーム
 	WorldTransform worldTransform_;
@@ -66,7 +70,10 @@ class GameScene {
 
 	//自キャラ
 	Player* player_ = nullptr;
+	//敵キャラ
 	Enemy* enemy_ = nullptr;
+	// 天球
+	Skydome* skydome_ = nullptr;
 	
-
+	
 };
