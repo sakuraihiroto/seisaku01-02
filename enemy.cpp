@@ -19,7 +19,7 @@ void Enemy::Initialize(Model* model) {
 	worldTransform_.Initialize();
 
 	//キャラクターの移動ベクトル
-	Vector3 move = { 0,10,-50 };//座標{x,y,z}
+	Vector3 move = { 0,0,50 };//座標{x,y,z}
 
 	//初期座標をセット
 	worldTransform_.translation_ = move;

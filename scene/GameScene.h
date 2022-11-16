@@ -13,6 +13,7 @@
 #include "Enemy.h"
 #include "Skydome.h"
 #include"DebugCamera.h"
+#include "WinApp.h"
 
 
 /// <summary>
@@ -74,6 +75,7 @@ class GameScene {
 	Enemy* enemy_ = nullptr;
 	// 天球
 	Skydome* skydome_ = nullptr;
-	
+	//マウス座標の取得
+	POINT mousePosition;
 	
 };

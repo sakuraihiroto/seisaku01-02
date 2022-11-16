@@ -9,6 +9,7 @@
 #include<memory>
 #include<list>
 #include "playerBullet.h"
+#include "ViewProjection.h"
 
 class Player
 {
@@ -53,6 +54,8 @@ public:
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
+	//ビュープロジェクション
+	ViewProjection viewProjection_;
 	// モデル
 	Model* model_ = nullptr;
 	Model* modelPlayerBullet_ = nullptr;

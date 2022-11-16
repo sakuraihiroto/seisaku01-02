@@ -42,4 +42,9 @@ private:
 	//デスフラグ
 	bool isDead_ = false;
 
+	//デスタイマー
+	int32_t deathTimer_ = kLifeTime;
+
+	static const int32_t kLifeTime = 60 * 5;
+
 };

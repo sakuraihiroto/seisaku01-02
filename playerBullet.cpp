@@ -36,6 +36,11 @@ Vector3 PlayerBullet::GetWorldPosition()
 
 void PlayerBullet::Update(Vector3& velocity, bool& shootFlag)
 {
+	if (--deathTimer_ <= 0)
+	{
+		isDead_ = true;
+	}
+
 	// ˆø”‚ÅŽó‚¯Žæ‚Á‚½‘¬“x‚ðƒƒ“ƒo•Ï”‚É‘ã“ü
 	velocity_ = velocity;
 

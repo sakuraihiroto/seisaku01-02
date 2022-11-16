@@ -52,10 +52,8 @@ void GameScene::Initialize() {
 	viewProjection_.Initialize();
 
 	//視点移動
-	viewProjection_.eye.z = 20;
 
 	viewProjection_.UpdateMatrix();
-
 
 }
 
@@ -64,17 +62,37 @@ void GameScene::Update() {
 	player_->Update();
 	enemy_->Update();
 
+	//マウス座標(スクリーン座標)を取得する
+	GetCursorPos(&mousePosition);
+
+	//クライアントエリア座標に変換する
+	HWND hwnd = WinApp::GetInstance()->GetHwnd();
+	ScreenToClient(hwnd, &mousePosition);
+
 	//視点移動
 	
+	viewProjection_.eye.x = mousePosition.x/100;
+	viewProjection_.eye.y = mousePosition.y/100;
 	
-	viewProjection_.eye.x = player_->GetX();
-	viewProjection_.eye.y = player_->GetY();
-	
-	viewProjection_.target.x = player_->GetX() - 10;
-	viewProjection_.target.y = player_->GetY() + 6;
-	viewProjection_.target.z = player_->GetZ();
-	viewProjection_.UpdateMatrix();
+	viewProjection_.target.x = player_->GetX();
+	viewProjection_.target.y = player_->GetY() + 6.5f;
 
+	////範囲を超えない処理
+	//viewProjection_.eye.x = max(viewProjection_.eye.x, -40.0f);
+	//viewProjection_.eye.x = min(viewProjection_.eye.x, +40.0f);
+	//viewProjection_.eye.y = max(viewProjection_.eye.y, -40.0f);
+	//viewProjection_.eye.y = min(viewProjection_.eye.y, +40.0f);
+
+
+	if (input_->PushKey(DIK_Q)) 
+	{
+		viewProjection_.eye.z = player_->GetZ() - 30;
+	}
+	else
+	{
+		viewProjection_.eye.z = player_->GetZ() + 10;
+	}
+	viewProjection_.UpdateMatrix();
 
 }
 
@@ -128,7 +146,18 @@ void GameScene::Draw() {
 
 	// デバッグテキストの描画
 	debugText_->DrawAll(commandList);
+
+	//デバックテキスト
+	debugText_->SetPos(50, 120);
+	debugText_->Printf(
+		"eye(X:%f)(Y:%f)(Z:%f)", viewProjection_.eye.x, viewProjection_.eye.y, viewProjection_.eye.z);
+
+	debugText_->SetPos(50, 160);
+	debugText_->Printf(
+		"mouse(X:%f)(Y:%f)", mousePosition.x, mousePosition.y);
 	//
+
+
 	// スプライト描画後処理
 	Sprite::PostDraw();
 

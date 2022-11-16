@@ -22,8 +22,11 @@ void Player::Initialize(Model* model)
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
 
+	//ビュープロジェクションの初期化
+	viewProjection_.Initialize();
+
 	//キャラクターの移動ベクトル
-	Vector3 move = { 0,0,0 };//座標{x,y,z}
+	Vector3 move = { 0,0,100 };//座標{x,y,z}
 
 	//初期座標をセット
 	worldTransform_.translation_ = move;
@@ -77,6 +80,7 @@ void Player::Attack()
 //アップデート
 void Player::Update()
 {
+	velocity_.z = -kBulletSpeed;
 
 	//キャラクターの移動ベクトル
 	Vector3 move = { 0, 0, 0 };
@@ -84,24 +88,25 @@ void Player::Update()
 	// 平行移動
 	{ // X方向
 		if (input_->PushKey(DIK_A)) {
-			move.x += 0.1f;
+			move.x += 0.2f;
+
 		}
 		else if (input_->PushKey(DIK_D)) {
-			move.x -= 0.1f;
+			move.x -= 0.2f;
 		}
-		// Y方向
+		// Z方向
 		if (input_->PushKey(DIK_W)) {
-			move.y += 0.1f;
+			move.z -= 0.2f;
 		}
 		else if (input_->PushKey(DIK_S)) {
-			move.y -= 0.1f;
+			move.z += 0.2f;
 		}
 		// Z方向
 		if (input_->PushKey(DIK_3)) {
-			move.z = 0.1f;
+			move.z = 0.2f;
 		}
 		else if (input_->PushKey(DIK_4)) {
-			move.z = -0.1f;
+			move.z = -0.2f;
 		}
 	}
 
@@ -113,17 +118,17 @@ void Player::Update()
 
 	{ // X方向
 		if (input_->PushKey(DIK_Q)) {
-			rotate.x = 1;
+			
 		}
 		else if (input_->PushKey(DIK_E)) {
-			rotate.x = -1;
+			
 		}
 		// Y方向
 		if (input_->PushKey(DIK_1)) {
-			rotate.y = 1;
+			rotate.y = +0.1f;
 		}
 		else if (input_->PushKey(DIK_2)) {
-			rotate.y = -1;
+			rotate.y = -0.1f;
 		}
 	}
 
