@@ -14,7 +14,7 @@
 #include "Skydome.h"
 #include"DebugCamera.h"
 #include "WinApp.h"
-
+#include <stdlib.h>
 
 /// <summary>
 /// ゲームシーン
@@ -47,6 +47,17 @@ class GameScene {
 	/// </summary>
 	void Draw();
 
+	/// <summary>
+	/// 衝突判定
+	/// </summary>
+	void Collision();
+
+	/// <summary>
+	/// 衝突判定(プレイヤーと敵)
+	/// </summary>
+	void CollisionPlayerEnamy();
+
+
   private: // メンバ変数
 	DirectXCommon* dxCommon_ = nullptr;
 	Input* input_ = nullptr;
@@ -56,7 +67,12 @@ class GameScene {
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
-	
+
+	//テクスチャハンドル
+	uint32_t textureHandle_reticle = 0; //レティクル
+
+	//スプライト
+	Sprite* sprite_reticle = nullptr; //レティクル
 
 	//3Dモデル
 	Model* model_ = nullptr;
@@ -73,9 +89,22 @@ class GameScene {
 	Player* player_ = nullptr;
 	//敵キャラ
 	Enemy* enemy_ = nullptr;
+	//敵キャラフラグ
+	int enemyFlag = 0;
 	// 天球
 	Skydome* skydome_ = nullptr;
-	//マウス座標の取得
-	POINT mousePosition;
+	//カメラカウント
+	float count = 0.0f;
+	float count1 = 0.0f;
+	//カメラフラグ
+	int cameraFlag = 0;
+	int cameraFlag1 = 0;
+	//シーン
+	int scene = 0;
+	int sceneFlag = 0;
+	//カメラシーン
+	int cameraScene = 0;
+
+	Vector3 playerWorldPos_;
 	
 };

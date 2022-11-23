@@ -103,6 +103,8 @@
     <ClCompile Include="base\WinApp.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="enemy.cpp" />
+    <ClCompile Include="EnemyBullet.cpp" />
+    <ClCompile Include="EnemyMissile.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="matWorld.cpp" />
     <ClCompile Include="player.cpp" />
@@ -135,6 +137,8 @@
     <ClInclude Include="base\WinApp.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="enemy.h" />
+    <ClInclude Include="EnemyBullet.h" />
+    <ClInclude Include="EnemyMissile.h" />
     <ClInclude Include="input\Input.h" />
     <ClInclude Include="math\MathUtility.h" />
     <ClInclude Include="math\Matrix4.h" />

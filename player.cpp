@@ -26,7 +26,7 @@ void Player::Initialize(Model* model)
 	viewProjection_.Initialize();
 
 	//キャラクターの移動ベクトル
-	Vector3 move = { 0,0,100 };//座標{x,y,z}
+	Vector3 move = { 0,0,50 };//座標{x,y,z}
 
 	//初期座標をセット
 	worldTransform_.translation_ = move;
@@ -80,6 +80,7 @@ void Player::Attack()
 //アップデート
 void Player::Update()
 {
+	//弾の位置
 	velocity_.z = -kBulletSpeed;
 
 	//キャラクターの移動ベクトル
@@ -87,56 +88,24 @@ void Player::Update()
 
 	// 平行移動
 	{ // X方向
-		if (input_->PushKey(DIK_A)) {
+		if (input_->PushKey(DIK_A)) {  //左
 			move.x += 0.2f;
 
 		}
-		else if (input_->PushKey(DIK_D)) {
+		else if (input_->PushKey(DIK_D)) { //右
 			move.x -= 0.2f;
 		}
-		// Z方向
-		if (input_->PushKey(DIK_W)) {
-			move.z -= 0.2f;
+		// Y方向
+		if (input_->PushKey(DIK_W)) { //上
+			move.y += 0.2f;
 		}
-		else if (input_->PushKey(DIK_S)) {
-			move.z += 0.2f;
-		}
-		// Z方向
-		if (input_->PushKey(DIK_3)) {
-			move.z = 0.2f;
-		}
-		else if (input_->PushKey(DIK_4)) {
-			move.z = -0.2f;
+		else if (input_->PushKey(DIK_S)) { //下
+			move.y -= 0.2f;
 		}
 	}
 
 	worldTransform_.translation_ += move;
-
-
-	// 回転ベクトル
-	Vector3 rotate = { 0, 0, 0 };
-
-	{ // X方向
-		if (input_->PushKey(DIK_Q)) {
-			
-		}
-		else if (input_->PushKey(DIK_E)) {
-			
-		}
-		// Y方向
-		if (input_->PushKey(DIK_1)) {
-			rotate.y = +0.1f;
-		}
-		else if (input_->PushKey(DIK_2)) {
-			rotate.y = -0.1f;
-		}
-	}
-
-	worldTransform_.rotation_ += rotate;
-
-	//弾の位置
 	
-
 	//デスフラグの立った弾を削除
 	bullets_.remove_if([](std::unique_ptr<PlayerBullet>& bullet) {
 		return bullet->IsDead();
@@ -147,7 +116,6 @@ void Player::Update()
 	//行列の転送
 	worldTransform_.TransferMatrix();
 
-	Attack();
 
 	// 弾更新
 	for (std::unique_ptr<PlayerBullet>& bullet : bullets_)

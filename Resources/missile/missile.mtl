@@ -1,4 +1,4 @@
-# Blender MTL File: 'bat_TD2.blend'
+# Blender MTL File: 'missile.blend'
 # Material Count: 1
 
 newmtl マテリアル
@@ -10,4 +10,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 1.000000
 illum 2
-map_Kd C:\\Users\\KO21G1130\\OneDrive\\デスクトップ\\seisaku\\KamataEngine2022_0920\\KamataEngine\\DirectXGame\\Resources\\bat\\bat.png
+map_Kd missile.png
