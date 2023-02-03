@@ -50,11 +50,13 @@ public:
 	void Draw(ViewProjection& viewProjection);
 
 	//衝突判定
-	void OnCollision(int& deadEnemyNum);
+	void OnCollision(int& hp);
 
 	void SetPlayer(Player* player) { player_ = player; }
 
 	void SetWorldPos(Vector3 worldPos) { playerWP = worldPos; }
+
+	void ResetBullet();
 
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
@@ -69,6 +71,7 @@ public:
 
 	//弾リストを取得
 	const std::list<std::unique_ptr<EnemyBullet>>& GetBullets() { return bullets_; }
+
 private:
 
 	//自キャラ
@@ -103,6 +106,7 @@ private:
 	bool isDead_ = false;
 
 	//ボスフェーズ2
+	bool isWeak_ = false;
 	bool isPhase2_ = false;
 
 	//発射タイマー
@@ -111,5 +115,5 @@ private:
 	int32_t missileTimer = 40;
 	int32_t LaserTimer = 10;
 	int32_t LaserNum = 3;
-
+	int32_t weakTimer = 300;
 };

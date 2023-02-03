@@ -17,7 +17,7 @@ void Enemy::Initialize(Model* model) {
 	missileModel_ = Model::CreateFromOBJ("missile", true);
 
 	//敵のHPの初期化
-	Hp = 5;
+	//Hp = 5;
 
 	//ワールド変換の初期化
 	worldTransform_.Initialize();
@@ -44,6 +44,10 @@ Vector3 Enemy::GetWorldPosition()
 
 void Enemy::Update()
 {
+	if (Hp < 3)
+	{
+		isPhase2_ = true;
+	}
 
 	// デスフラグの立った弾を解除
 	bullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet)
@@ -75,44 +79,51 @@ void Enemy::Update()
 	// 発射タイマーカウントダウン
 	fireTimer--;
 	LaserTimer--;
+	//敵の弱点カウントダウン
+	weakTimer--;
+	if (weakTimer < 0)
+	{
+		isWeak_ = true;
+	}
+
 	//敵がフェーズ2の時
 	if (isPhase2_ == true)
 	{
-		
-		//// 指定時間に達した
-		//if (LaserTimer<0&&LaserNum > 0)
-		//{
-		//	// 弾を発射
-		//	Laser();
-		//	Missile();
-		//	LaserNum--;
-		//	// 発射タイマーを初期化
-		//	LaserTimer = 20;// 1/3秒
-		//	fireTimer = 60;//1秒
-		//}
-		//if (fireTimer<0)
-		//{
-		//	LaserNum = 3;
-		//}
+		// 指定時間に達した
+		if (LaserTimer < 0 && LaserNum > 0)
+		{
+			// 弾を発射
+			Laser();
+			Missile();
+			LaserNum--;
+			// 発射タイマーを初期化
+			LaserTimer = 20;// 1/3秒
+			fireTimer = 60;//1秒
+		}
+		if (fireTimer < 0)
+		{
+			LaserNum = 3;
+		}
 	}
 	//敵がフェーズ1の時
 	if (isPhase2_ == false)
+	{
 		missileTimer--;
-	// 指定時間に達した
-	if (fireTimer < 0)
-	{
-		// 弾を発射
-		Laser();
-		missileTimer = 40;
-		// 発射タイマーを初期化
-		fireTimer = kFireInterval;
+		// 指定時間に達した
+		if (fireTimer < 0)
+		{
+			// 弾を発射
+			Laser();
+			missileTimer = 40;
+			// 発射タイマーを初期化
+			fireTimer = kFireInterval;
+		}
+		if (missileTimer < 0)
+		{
+			Missile();
+			missileTimer = 40;
+		}
 	}
-	if (missileTimer < 0)
-	{
-		Missile();
-		missileTimer = 40;
-	}
-
 	// レーザー更新
 	for (std::unique_ptr<EnemyBullet>& bullet : bullets_)
 	{
@@ -133,14 +144,7 @@ void Enemy::Update()
 
 void Enemy::Laser()
 {
-	//assert(player_);
-
-	//// 弾の速度
-	//const float kBulletSpeed = 1.0f;
-
-	//// ベクトルの長さを速さに合わせる
-	//len *= -kBulletSpeed;
-
+	
 	// 弾を生成し、初期化
 	std::unique_ptr<EnemyBullet> newBullet = std::make_unique<EnemyBullet>();
 	newBullet->Initialize(worldTransform_.translation_, len);
@@ -155,21 +159,50 @@ void Enemy::Missile()
 	std::unique_ptr<EnemyMissile> newMissile = std::make_unique<EnemyMissile>();
 	newMissile->Initialize(missileModel_, worldTransform_.translation_);
 
-
 	// 弾を登録する
 	missiles_.push_back(std::move(newMissile));
 }
 
+void Enemy::ResetBullet()
+{
+	for (std::unique_ptr<EnemyBullet>& laser : bullets_)
+	{
+		laser->OnCollision();
+	}
+	for (std::unique_ptr<EnemyMissile>& missile : missiles_)
+	{
+		missile->OnCollision();
+	}
+
+	// デスフラグの立った弾を解除
+	bullets_.remove_if([](std::unique_ptr<EnemyBullet>& bullet)
+		{
+			return bullet->IsDead();
+		}
+	);
+	// デスフラグの立った弾を解除
+	missiles_.remove_if([](std::unique_ptr<EnemyMissile>& missile)
+		{
+			return missile->IsDead();
+		}
+	);
+}
+
 
 //衝突判定
-void Enemy::OnCollision(int& deadEnemyNum)
+void Enemy::OnCollision(int& hp)
 {
-	Hp -= 1;
-	if (Hp < 3)
+	if (isWeak_)
+	{
+		hp -= 1;
+		isWeak_ = false;
+		weakTimer = 300;
+	}
+	if (hp < 3)
 	{
 		isPhase2_ = true;
 	}
-	if (Hp <= 0)
+	if (hp <= 0)
 	{
 		isDead_ = true;
 	}
@@ -177,7 +210,6 @@ void Enemy::OnCollision(int& deadEnemyNum)
 
 void Enemy::Draw(ViewProjection& viewProjection)
 {
-
 	//モデルの描画
 	model_->Draw(worldTransform_, viewProjection);
 	// 弾の描画

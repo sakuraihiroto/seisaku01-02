@@ -14,6 +14,17 @@
 class Player
 {
 public:
+
+	enum class action
+	{
+		待つ,
+		左,
+		右,
+		前,
+		後ろ,
+		攻撃,
+	};
+
 	///<summary>
 	///初期化
 	/// </summary>
@@ -45,6 +56,8 @@ public:
 
 	//衝突判定
 	void OnCollision(int& hp);
+	//行列の計算と転送
+	void Mat();
 
 	//プレイヤーの座標
 	float GetX() { return worldTransform_.translation_.x; }
@@ -59,6 +72,16 @@ private:
 	// モデル
 	Model* model_ = nullptr;
 	Model* modelPlayerBullet_ = nullptr;
+	Model* modelPlayerShoot_ = nullptr;
+	Model* modelPlayerFront_ = nullptr;
+	Model* modelPlayerBack_ = nullptr;
+	Model* modelPlayerLeft_ = nullptr;
+	Model* modelPlayerRight_ = nullptr;
+
+
+	//方向
+	action action = action::待つ;
+
 	// テクスチャハンドル
 	uint32_t textureHandle_ = 0u;
 	// 入力処理するため
@@ -69,6 +92,9 @@ private:
 	// デバッグテキスト
 	DebugText* debugText_ = nullptr;
 
+	const int32_t cShootTimer = 60;
+	int32_t shootTimer = cShootTimer;
+
 	//発射フラグ
 	bool shootFlag = 0;
 	//タイマー
@@ -76,7 +102,7 @@ private:
 	//速度
 	Vector3 velocity_;
 	//弾の速度
-	float kBulletSpeed= 1.0f; //スピード
-	
+	float kBulletSpeed = 1.0f; //スピード
+
 
 };

@@ -41,6 +41,7 @@ void PlayerBullet::Update(Vector3& velocity, bool& shootFlag)
 		isDead_ = true;
 	}
 
+
 	// ˆø”‚Åó‚¯æ‚Á‚½‘¬“x‚ğƒƒ“ƒo•Ï”‚É‘ã“ü
 	velocity_ = velocity;
 
